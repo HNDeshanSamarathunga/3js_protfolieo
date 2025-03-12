@@ -21,11 +21,40 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    const { name,value } = e.target;
-    
-    setForm({...form,[name]:value})
+    const { name, value } = e.target;
+
+    setForm({ ...form, [name]: value })
   };
-  const handleSubmit = (e) => {};
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    emailjs.send(
+      'service_f4f26d8',
+      'template_6cuxyo8',
+      {
+        from_name: form.name,
+        to_name: 'Deshan',
+        from_email: form.email,
+        to_email: 'hndsamarathunga17@gmail.com',
+        message: form.message,
+      },
+      'GLN74olAVEPe7KGtX'
+    )
+      .then(() => {
+        setLoading(false);
+        alert('Thank You. I will get back to you as soon as possible');
+        setForm({
+          name: '',
+          email: '',
+          message: ''
+        }, (error) => {
+          setLoading(false);
+          console.error(error);
+          alert("Ahh, something went wrong. Please try again.");
+        })
+      })
+  };
 
   return (
     <div className="flex flex-col-reverse gap-10 overflow-hidden xl:mt-12 xl:flex-row ">
@@ -91,10 +120,10 @@ const Contact = () => {
         variants={slideIn("right", "tween", 0.2, 1)}
         className="xl:flex-1 xl:h-auto md:h-[550px] h-[350px]"
       >
-        <EarthCanvas/>
+        <EarthCanvas />
       </motion.div>
 
-      
+
     </div>
   );
 };
